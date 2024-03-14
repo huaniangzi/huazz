@@ -199,6 +199,9 @@ install_ldnmp() {
           "docker exec php install-php-extensions opcache > /dev/null 2>&1"
           "docker exec php install-php-extensions imagick redis > /dev/null 2>&1"
           "docker exec php install-php-extensions sourceguardian > /dev/null 2>&1"
+          "docker exec php install-php-extensions opcache > /dev/null 2>&1"
+          "docker exec php install-php-extensions apcu > /dev/null 2>&1"
+          "docker exec php install-php-extensions memcached > /dev/null 2>&1"
 
           # php配置参数
           "docker exec php sh -c 'echo \"upload_max_filesize=50M \" > /usr/local/etc/php/conf.d/uploads.ini' > /dev/null 2>&1"
@@ -220,6 +223,9 @@ install_ldnmp() {
           "docker exec php74 install-php-extensions opcache > /dev/null 2>&1"
           "docker exec php74 install-php-extensions imagick redis > /dev/null 2>&1"
           "docker exec php74 install-php-extensions sourceguardian > /dev/null 2>&1"
+          "docker exec php install-php-extensions opcache > /dev/null 2>&1"
+          "docker exec php install-php-extensions apcu > /dev/null 2>&1"
+          "docker exec php install-php-extensions memcached > /dev/null 2>&1"
 
           # php7.4配置参数
           "docker exec php74 sh -c 'echo \"upload_max_filesize=50M \" > /usr/local/etc/php/conf.d/uploads.ini' > /dev/null 2>&1"
@@ -4704,7 +4710,7 @@ EOF
               reboot
               ;;
           0)
-              huaniangzi
+              huazz
 
               ;;
           *)

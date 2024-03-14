@@ -115,22 +115,6 @@ check_port() {
     fi
 }
 
-check_userport() {
-    install lsof
-    clear
-    while true; do
-        read -p "输入端口号: " userport
-        if lsof -Pi :$userport -sTCP:LISTEN -t >/dev/null; then
-            echo "端口 $userport 已被占用，请重新输入新的端口号。"
-        else
-            echo "端口 $userport 可用。"
-            break
-        fi
-    done
-}
-
-
-
 install_add_docker() {
     if [ -f "/etc/alpine-release" ]; then
         apk update
@@ -199,9 +183,6 @@ install_ldnmp() {
           "docker exec php install-php-extensions opcache > /dev/null 2>&1"
           "docker exec php install-php-extensions imagick redis > /dev/null 2>&1"
           "docker exec php install-php-extensions sourceguardian > /dev/null 2>&1"
-          "docker exec php install-php-extensions opcache > /dev/null 2>&1"
-          "docker exec php install-php-extensions apcu > /dev/null 2>&1"
-          "docker exec php install-php-extensions memcached > /dev/null 2>&1"
 
           # php配置参数
           "docker exec php sh -c 'echo \"upload_max_filesize=50M \" > /usr/local/etc/php/conf.d/uploads.ini' > /dev/null 2>&1"
@@ -223,9 +204,6 @@ install_ldnmp() {
           "docker exec php74 install-php-extensions opcache > /dev/null 2>&1"
           "docker exec php74 install-php-extensions imagick redis > /dev/null 2>&1"
           "docker exec php74 install-php-extensions sourceguardian > /dev/null 2>&1"
-          "docker exec php install-php-extensions opcache > /dev/null 2>&1"
-          "docker exec php install-php-extensions apcu > /dev/null 2>&1"
-          "docker exec php install-php-extensions memcached > /dev/null 2>&1"
 
           # php7.4配置参数
           "docker exec php74 sh -c 'echo \"upload_max_filesize=50M \" > /usr/local/etc/php/conf.d/uploads.ini' > /dev/null 2>&1"
@@ -1087,17 +1065,9 @@ case $choice in
     echo  "1. 安装LDNMP环境"
     echo  "------------------------"
     echo -e "\033[91m▼ LDNMP项目 ▼\033[0m"
-    echo "---------------------------------------------------------"
-    echo  "2. WordPress               3. Discuz论坛"
-    echo  "4. 可道云桌面              5. 苹果CMS网站"
-    echo  "6. 独角数发卡网            7. BingChatAI聊天网站"
-    echo  "8. flarum论坛网站          9. vaultwarden密码管理平台"
-    echo  "10. Halo博客网站           11. typecho轻量博客网站"
-    echo  "101. lan朋友圈网站"
-    echo "---------------------------------------------------------"
     echo -e "\033[91m▼ 正版授权项目 ▼\033[0m"
     echo "---------------------------------------------------------"
-    echo  "101. Miaoo朋友圈网站           102. 至尊码支付网站"
+    echo  "2. Miaoo朋友圈网站"
     echo "---------------------------------------------------------"
     echo -e "\033[91m▼ LDNMP工具 ▼\033[0m"
     echo "---------------------------------------------------------"
@@ -1142,363 +1112,8 @@ case $choice in
       install_ldnmp
 
         ;;
+
       2)
-      clear
-      # wordpress
-      add_yuming
-      install_ssltls
-      add_db
-
-      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/wordpress.com.conf
-      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
-
-      cd /home/web/html
-      mkdir $yuming
-      cd $yuming
-      wget -O latest.zip https://cn.wordpress.org/latest-zh_CN.zip
-      unzip latest.zip
-      rm latest.zip
-
-      echo "define('FS_METHOD', 'direct'); define('WP_REDIS_HOST', 'redis'); define('WP_REDIS_PORT', '6379');" >> /home/web/html/$yuming/wordpress/wp-config-sample.php
-
-      restart_ldnmp
-
-      clear
-      echo "您的WordPress搭建好了！"
-      echo "https://$yuming"
-      echo "------------------------"
-      echo "WP安装信息如下: "
-      echo "数据库名: $dbname"
-      echo "用户名: $dbuse"
-      echo "密码: $dbusepasswd"
-      echo "数据库地址: mysql"
-      echo "表前缀: wp_"
-      nginx_status
-        ;;
-
-      3)
-      clear
-      # Discuz论坛
-      add_yuming
-      install_ssltls
-      add_db
-
-      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/discuz.com.conf
-
-      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
-
-      cd /home/web/html
-      mkdir $yuming
-      cd $yuming
-      wget https://github.com/huaniangzi/Website_source_code/raw/main/Discuz_X3.5_SC_UTF8_20230520.zip
-      unzip -o Discuz_X3.5_SC_UTF8_20230520.zip
-      rm Discuz_X3.5_SC_UTF8_20230520.zip
-
-      restart_ldnmp
-
-
-      clear
-      echo "您的Discuz论坛搭建好了！"
-      echo "https://$yuming"
-      echo "------------------------"
-      echo "安装信息如下: "
-      echo "数据库地址: mysql"
-      echo "数据库名: $dbname"
-      echo "用户名: $dbuse"
-      echo "密码: $dbusepasswd"
-      echo "表前缀: discuz_"
-      nginx_status
-
-        ;;
-
-      4)
-      clear
-      # 可道云桌面
-      add_yuming
-      install_ssltls
-      add_db
-
-      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/kdy.com.conf
-      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
-
-      cd /home/web/html
-      mkdir $yuming
-      cd $yuming
-      wget https://github.com/kalcaddle/kodbox/archive/refs/tags/1.42.04.zip
-      unzip -o 1.42.04.zip
-      rm 1.42.04.zip
-
-      restart_ldnmp
-
-
-      clear
-      echo "您的可道云桌面搭建好了！"
-      echo "https://$yuming"
-      echo "------------------------"
-      echo "安装信息如下: "
-      echo "数据库地址: mysql"
-      echo "用户名: $dbuse"
-      echo "密码: $dbusepasswd"
-      echo "数据库名: $dbname"
-      echo "redis主机: redis"
-      nginx_status
-        ;;
-
-      5)
-      clear
-      # 苹果CMS
-      add_yuming
-      install_ssltls
-      add_db
-
-      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/maccms.com.conf
-
-      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
-
-      cd /home/web/html
-      mkdir $yuming
-      cd $yuming
-      wget https://github.com/magicblack/maccms_down/raw/master/maccms10.zip && unzip maccms10.zip && rm maccms10.zip
-      cd /home/web/html/$yuming/template/ && wget https://github.com/huaniangzi/Website_source_code/raw/main/DYXS2.zip && unzip DYXS2.zip && rm /home/web/html/$yuming/template/DYXS2.zip
-      cp /home/web/html/$yuming/template/DYXS2/asset/admin/Dyxs2.php /home/web/html/$yuming/application/admin/controller
-      cp /home/web/html/$yuming/template/DYXS2/asset/admin/dycms.html /home/web/html/$yuming/application/admin/view/system
-      mv /home/web/html/$yuming/admin.php /home/web/html/$yuming/vip.php && wget -O /home/web/html/$yuming/application/extra/maccms.php https://raw.githubusercontent.com/huaniangzi/Website_source_code/main/maccms.php
-
-      restart_ldnmp
-
-
-      clear
-      echo "您的苹果CMS搭建好了！"
-      echo "https://$yuming"
-      echo "------------------------"
-      echo "安装信息如下: "
-      echo "数据库地址: mysql"
-      echo "数据库端口: 3306"
-      echo "数据库名: $dbname"
-      echo "用户名: $dbuse"
-      echo "密码: $dbusepasswd"
-      echo "数据库前缀: mac_"
-      echo "------------------------"
-      echo "安装成功后登录后台地址"
-      echo "https://$yuming/vip.php"
-      nginx_status
-        ;;
-
-      6)
-      clear
-      # 独脚数卡
-      add_yuming
-      install_ssltls
-      add_db
-
-      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/dujiaoka.com.conf
-
-      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
-
-      cd /home/web/html
-      mkdir $yuming
-      cd $yuming
-      wget https://github.com/assimon/dujiaoka/releases/download/2.0.6/2.0.6-antibody.tar.gz && tar -zxvf 2.0.6-antibody.tar.gz && rm 2.0.6-antibody.tar.gz
-
-      restart_ldnmp
-
-
-      clear
-      echo "您的独角数卡网站搭建好了！"
-      echo "https://$yuming"
-      echo "------------------------"
-      echo "安装信息如下: "
-      echo "数据库地址: mysql"
-      echo "数据库端口: 3306"
-      echo "数据库名: $dbname"
-      echo "用户名: $dbuse"
-      echo "密码: $dbusepasswd"
-      echo ""
-      echo "redis地址: redis"
-      echo "redis密码: 默认不填写"
-      echo "redis端口: 6379"
-      echo ""
-      echo "网站url: https://$yuming"
-      echo "后台登录路径: /admin"
-      echo "------------------------"
-      echo "用户名: admin"
-      echo "密码: admin"
-      echo "------------------------"
-      echo "登录时右上角如果出现红色error0请使用如下命令: "
-      echo "我也很气愤独角数卡为啥这么麻烦，会有这样的问题！"
-      echo "sed -i 's/ADMIN_HTTPS=false/ADMIN_HTTPS=true/g' /home/web/html/$yuming/dujiaoka/.env"
-      nginx_status
-        ;;
-
-      7)
-      clear
-      # BingChat
-      add_yuming
-      install_ssltls
-
-      docker run -d -p 3099:8080 --name go-proxy-bingai --restart=unless-stopped adams549659584/go-proxy-bingai
-      duankou=3099
-      reverse_proxy
-
-      clear
-      echo "您的BingChat网站搭建好了！"
-      echo "https://$yuming"
-      nginx_status
-        ;;
-
-      8)
-      clear
-      # flarum论坛
-      add_yuming
-      install_ssltls
-      add_db
-
-      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/flarum.com.conf
-      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
-
-      cd /home/web/html
-      mkdir $yuming
-      cd $yuming
-
-      docker exec php sh -c "php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\""
-      docker exec php sh -c "php composer-setup.php"
-      docker exec php sh -c "php -r \"unlink('composer-setup.php');\""
-      docker exec php sh -c "mv composer.phar /usr/local/bin/composer"
-
-      docker exec php composer create-project flarum/flarum /var/www/html/$yuming
-      docker exec php sh -c "cd /var/www/html/$yuming && composer require flarum-lang/chinese-simplified"
-      docker exec php sh -c "cd /var/www/html/$yuming && composer require fof/polls"
-
-      restart_ldnmp
-
-
-      clear
-      echo "您的flarum论坛网站搭建好了！"
-      echo "https://$yuming"
-      echo "------------------------"
-      echo "安装信息如下: "
-      echo "数据库地址: mysql"
-      echo "数据库名: $dbname"
-      echo "用户名: $dbuse"
-      echo "密码: $dbusepasswd"
-      echo "表前缀: flarum_"
-      echo "管理员信息自行设置"
-      nginx_status
-        ;;
-
-      9)
-      clear
-      # vaultwarden
-      check_userport
-      add_yuming
-      install_ssltls
-
-      docker run -d \
-        --name vaultwarden \
-        -p $userport:80 \
-        -v /home/docker/vaultwarden/data:/data \
-        -e LOGIN_RATELIMIT_MAX_BURST=10 \
-        -e LOGIN_RATELIMIT_SECONDS=60 \
-        -e ADMIN_RATELIMIT_MAX_BURST=10 \
-        -e ADMIN_RATELIMIT_SECONDS=60 \
-        -e ADMIN_SESSION_LIFETIME=20 \
-        -e ADMIN_TOKEN=hCWqQngEdKJmWGTSHUvhwyVnSmAPUK \
-        -e SENDS_ALLOWED=true \
-        -e EMERGENCY_ACCESS_ALLOWED=true \
-        -e WEB_VAULT_ENABLED=true \
-        -e SIGNUPS_ALLOWED=true \
-        vaultwarden/server:latest
-      duankou=$userport
-      reverse_proxy
-
-      clear
-      echo "您的vaultwarden网站搭建好了！"
-      echo "https://$yuming"
-      nginx_status
-        ;;
-
-      10)
-      clear
-      # halo
-      add_yuming
-      install_ssltls
-
-      docker run -d --name halo --restart always --network web_default -p 8010:8090 -v /home/web/html/$yuming/.halo2:/root/.halo2 halohub/halo:2.11
-      duankou=8010
-      reverse_proxy
-
-      clear
-      echo "您的Halo网站搭建好了！"
-      echo "https://$yuming"
-      nginx_status
-        ;;
-
-      11)
-      clear
-      # typecho
-      add_yuming
-      install_ssltls
-      add_db
-
-      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/typecho.com.conf
-      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
-
-      cd /home/web/html
-      mkdir $yuming
-      cd $yuming
-      wget -O latest.zip https://github.com/typecho/typecho/releases/latest/download/typecho.zip
-      unzip latest.zip
-      rm latest.zip
-
-      restart_ldnmp
-
-
-      clear
-      echo "您的typecho搭建好了！"
-      echo "https://$yuming"
-      echo "------------------------"
-      echo "安装信息如下: "
-      echo "数据库前缀: typecho_"
-      echo "数据库地址: mysql"
-      echo "用户名: $dbuse"
-      echo "密码: $dbusepasswd"
-      echo "数据库名: $dbname"
-      nginx_status
-        ;;
-
-      12)
-      clear
-      # lan朋友圈
-      add_yuming
-      install_ssltls
-      add_db
-
-      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/miaoo.com.conf
-      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
-
-      cd /home/web/html
-      mkdir $yuming
-      cd $yuming
-      wget -O latest.zip https://api.trii.top/tools/tol/upload/source/lan.zip
-      unzip latest.zip
-      rm latest.zip
-
-      restart_ldnmp
-
-      clear
-      echo "您的lan朋友圈搭建好了！"
-      echo "https://$yuming"
-      echo "------------------------"
-      echo "安装信息如下: "
-      echo "数据库地址: mysql"
-      echo "数据库名: $dbname"
-      echo "数据库账号: $dbuse"
-      echo "数据库密码: $dbusepasswd"
-      echo "管理员账号: 账号自己设置，默认密码123456"
-      nginx_status
-        ;;
-
-      101)
       clear
       # miaoo朋友圈
       add_yuming
@@ -1527,37 +1142,6 @@ case $choice in
       echo "数据库账号: $dbuse"
       echo "数据库密码: $dbusepasswd"
       echo "管理员账号: 账号自己设置，默认密码123456"
-      nginx_status
-        ;;
-
-      102)
-      clear
-      # 至尊码支付
-      add_yuming
-      install_ssltls
-      add_db
-
-      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/huazz/main/nginx/zhizunpay.com.conf
-      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
-
-      cd /home/web/html
-      mkdir $yuming
-      cd $yuming
-      wget -O latest.zip https://api.trii.top/tools/tol/upload/source/zhizunpay.zip
-      unzip latest.zip
-      rm latest.zip
-
-      restart_ldnmp
-
-      clear
-      echo "您的至尊码支付搭建好了！"
-      echo "https://$yuming"
-      echo "------------------------"
-      echo "安装信息如下: "
-      echo "数据库地址: mysql"
-      echo "数据库名: $dbname"
-      echo "数据库账号: $dbuse"
-      echo "数据库密码: $dbusepasswd"
       nginx_status
         ;;
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-ln -sf ~/huazz.sh /usr/local/bin/huazz
+ln -sf ~/huazz.sh /usr/local/bin/ylsll
 
 # 定义颜色
 red='\033[31m'      # 红色    ${red}
@@ -84,7 +84,7 @@ break_end() {
 }
 
 huazz() {
-            huazz
+            ylsll
             exit
 }
 

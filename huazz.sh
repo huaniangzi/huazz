@@ -1,5 +1,5 @@
 #!/bin/bash
-ln -sf ~/huaniangzi.sh /usr/local/bin/huazz
+ln -sf ~/huazz.sh /usr/local/bin/huazz
 
 # 定义颜色
 red='\033[31m'      # 红色    ${red}
@@ -83,7 +83,7 @@ break_end() {
       clear
 }
 
-huaniangzi() {
+huazz() {
             huazz
             exit
 }
@@ -107,7 +107,7 @@ check_port() {
             echo -e "\e[1;31m端口 $PORT 已被占用，无法安装环境，卸载以下程序后重试！\e[0m"
             echo "$result"
             break_end
-            huaniangzi
+            huazz
 
         fi
     else
@@ -1059,7 +1059,7 @@ case $choice in
               esac
               ;;
           0)
-              huaniangzi
+              huazz
 
               ;;
           *)
@@ -1087,8 +1087,11 @@ case $choice in
     echo  "6. 独角数发卡网            7. BingChatAI聊天网站"
     echo  "8. flarum论坛网站          9. vaultwarden密码管理平台"
     echo  "10. Halo博客网站           11. typecho轻量博客网站"
-    echo "---------------------------------------------------------"
     echo  "101. lan朋友圈网站"
+    echo "---------------------------------------------------------"
+    echo -e "\033[91m▼ 正版授权项目 ▼\033[0m"
+    echo "---------------------------------------------------------"
+    echo  "101. Miaoo朋友圈网站           102. 至尊码支付网站"
     echo "---------------------------------------------------------"
     echo -e "\033[91m▼ LDNMP工具 ▼\033[0m"
     echo "---------------------------------------------------------"
@@ -1457,7 +1460,7 @@ case $choice in
       nginx_status
         ;;
 
-      101)
+      12)
       clear
       # lan朋友圈
       add_yuming
@@ -1486,6 +1489,69 @@ case $choice in
       echo "数据库账号: $dbuse"
       echo "数据库密码: $dbusepasswd"
       echo "管理员账号: 账号自己设置，默认密码123456"
+      nginx_status
+        ;;
+
+      101)
+      clear
+      # miaoo朋友圈
+      add_yuming
+      install_ssltls
+      add_db
+
+      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/huazz/main/nginx/miaoo.com.conf
+      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
+
+      cd /home/web/html
+      mkdir $yuming
+      cd $yuming
+      wget -O latest.zip https://github.com/huaniangzi/huazz/raw/main/file/miaoo.zip
+      unzip latest.zip
+      rm latest.zip
+
+      restart_ldnmp
+
+      clear
+      echo "您的miaoo朋友圈搭建好了！"
+      echo "https://$yuming"
+      echo "------------------------"
+      echo "安装信息如下: "
+      echo "数据库地址: mysql"
+      echo "数据库名: $dbname"
+      echo "数据库账号: $dbuse"
+      echo "数据库密码: $dbusepasswd"
+      echo "管理员账号: 账号自己设置，默认密码123456"
+      nginx_status
+        ;;
+
+      102)
+      clear
+      # 至尊码支付
+      add_yuming
+      install_ssltls
+      add_db
+
+      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/huazz/main/nginx/zhizunpay.com.conf
+      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
+
+      cd /home/web/html
+      mkdir $yuming
+      cd $yuming
+      wget -O latest.zip https://api.trii.top/tools/tol/upload/source/zhizunpay.zip
+      unzip latest.zip
+      rm latest.zip
+
+      restart_ldnmp
+
+      clear
+      echo "您的至尊码支付搭建好了！"
+      echo "https://$yuming"
+      echo "------------------------"
+      echo "安装信息如下: "
+      echo "数据库地址: mysql"
+      echo "数据库名: $dbname"
+      echo "数据库账号: $dbuse"
+      echo "数据库密码: $dbusepasswd"
       nginx_status
         ;;
 
@@ -2018,7 +2084,7 @@ case $choice in
         ;;
 
     0)
-        huaniangzi
+        huazz
       ;;
 
     *)
@@ -3236,7 +3302,7 @@ case $choice in
 
 
           0)
-              huaniangzi
+              huazz
               ;;
           *)
               echo "无效的输入!"
@@ -4652,13 +4718,13 @@ EOF
 
   00)
     cd ~
-    curl -sS -O https://raw.tiiii.top/update_log.sh && chmod +x update_log.sh && ./update_log.sh
+    curl -sS -O https://raw.githubusercontent.com/huaniangzi/huazz/main/update_log.sh && chmod +x update_log.sh && ./update_log.sh
     rm update_log.sh
     echo ""
-    curl -sS -O https://raw.tiiii.top/huazz.sh && chmod +x huazz.sh
+    curl -sS -O https://raw.githubusercontent.com/huaniangzi/huazz/main/huazz.sh && chmod +x huazz.sh
     echo "脚本已更新到最新版本！"
     break_end
-    huaniangzi
+    huazz
     ;;
 
   0)

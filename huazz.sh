@@ -1173,7 +1173,7 @@ case $choice in
       echo "数据库账号: $dbuse"
       echo "数据库密码: $dbusepasswd"
       echo "在根目录执行以下内容"
-      echo "wget -0 https://raw.githubusercontent.com/huaniangzi/huazz/main/nginx/zhizunpay.sh && chmod +x zhizunpay.sh"
+      echo "wget https://raw.githubusercontent.com/huaniangzi/huazz/main/nginx/zhizunpay.sh && chmod +x zhizunpay.sh"
       echo "crontab -e"
       echo "echo "* * * * * /root/zhizunpay.sh" | sudo crontab -"
 

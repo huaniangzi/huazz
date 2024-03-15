@@ -362,7 +362,7 @@ add_db() {
 
 reverse_proxy() {
       ip_address
-      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/reverse-proxy.conf
+      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/sh/main/nginx/reverse-proxy.conf
       sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
       sed -i "s/0.0.0.0/$ipv4_address/g" /home/web/conf.d/$yuming.conf
       sed -i "s/0000/$duankou/g" /home/web/conf.d/$yuming.conf
@@ -490,7 +490,7 @@ echo -e "\033[96m_ _ _ _  _   _  _ _  _  _  _  ___  ___ _ "
 echo "|_| | | /_\  |\ | | /_\ |\ | |  _   /  | "
 echo "| | |_| | |  | \| | | | | \| |__|  /__ | "
 echo "                                "
-echo -e "\033[96m花娘子一键脚本工具 v1.0.0 （支持Ubuntu/Debian/CentOS/Alpine系统）\033[0m"
+echo -e "\033[96m花娘子一键脚本工具 v1.0.1 （支持Ubuntu/Debian/CentOS/Alpine系统）\033[0m"
 echo -e "\033[96m-输入\033[93mh\033[96m可快速启动此脚本\033[0m"
 echo "------------------------"
 echo "1. 系统信息查询"
@@ -1094,12 +1094,12 @@ case $choice in
       # 创建必要的目录和文件
       cd /home && mkdir -p web/html web/mysql web/certs web/conf.d web/redis web/log/nginx && touch web/docker-compose.yml
 
-      wget -O /home/web/nginx.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/nginx10.conf
-      wget -O /home/web/conf.d/default.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/default10.conf
+      wget -O /home/web/nginx.conf https://raw.githubusercontent.com/huaniangzi/sh/main/nginx/nginx10.conf
+      wget -O /home/web/conf.d/default.conf https://raw.githubusercontent.com/huaniangzi/sh/main/nginx/default10.conf
       default_server_ssl
 
       # 下载 docker-compose.yml 文件并进行替换
-      wget -O /home/web/docker-compose.yml https://raw.githubusercontent.com/huaniangzi/docker/main/LNMP-docker-compose-10.yml
+      wget -O /home/web/docker-compose.yml https://raw.githubusercontent.com/huaniangzi/sh/main/docker/LNMP-docker-compose-11.yml
 
       dbrootpasswd=$(openssl rand -base64 16) && dbuse=$(openssl rand -hex 4) && dbusepasswd=$(openssl rand -base64 8)
 
@@ -1144,6 +1144,37 @@ case $choice in
       nginx_status
         ;;
 
+      2)
+      clear
+      # 至尊码支付
+      add_yuming
+      install_ssltls
+      add_db
+
+      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/huazz/main/nginx/zhizunpay.com.conf
+      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
+
+      cd /home/web/html
+      mkdir $yuming
+      cd $yuming
+      wget -O latest.zip https://api.trii.top/tools/tol/upload/source/zhizunpay.zip
+      unzip latest.zip
+      rm latest.zip
+
+      restart_ldnmp
+
+      clear
+      echo "您的至尊码支付搭建好了！"
+      echo "https://$yuming"
+      echo "------------------------"
+      echo "安装信息如下: "
+      echo "数据库地址: mysql"
+      echo "数据库名: $dbname"
+      echo "数据库账号: $dbuse"
+      echo "数据库密码: $dbusepasswd"
+      nginx_status
+        ;;
+
       21)
       check_port
       install_dependency
@@ -1152,8 +1183,8 @@ case $choice in
 
       cd /home && mkdir -p web/html web/mysql web/certs web/conf.d web/redis web/log/nginx && touch web/docker-compose.yml
 
-      wget -O /home/web/nginx.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/nginx10.conf
-      wget -O /home/web/conf.d/default.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/default10.conf
+      wget -O /home/web/nginx.conf https://raw.githubusercontent.com/huaniangzi/sh/main/nginx/nginx10.conf
+      wget -O /home/web/conf.d/default.conf https://raw.githubusercontent.com/huaniangzi/sh/main/nginx/default10.conf
       default_server_ssl
       docker rm -f nginx >/dev/null 2>&1
       docker rmi nginx nginx:alpine >/dev/null 2>&1
@@ -1175,7 +1206,7 @@ case $choice in
 
       install_ssltls
 
-      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/rewrite.conf
+      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/sh/main/nginx/rewrite.conf
       sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
       sed -i "s/baidu.com/$reverseproxy/g" /home/web/conf.d/$yuming.conf
 
@@ -1197,7 +1228,7 @@ case $choice in
 
       install_ssltls
 
-      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/reverse-proxy.conf
+      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/sh/main/nginx/reverse-proxy.conf
       sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
       sed -i "s/0.0.0.0/$reverseproxy/g" /home/web/conf.d/$yuming.conf
       sed -i "s/0000/$port/g" /home/web/conf.d/$yuming.conf
@@ -1216,7 +1247,7 @@ case $choice in
       add_yuming
       install_ssltls
 
-      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/html.conf
+      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/sh/main/nginx/html.conf
       sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
 
       cd /home/web/html
@@ -1543,8 +1574,8 @@ case $choice in
           systemctl restart fail2ban
           docker rm -f nginx
 
-          wget -O /home/web/nginx.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/nginx10.conf
-          wget -O /home/web/conf.d/default.conf https://raw.githubusercontent.com/huaniangzi/nginx/main/default10.conf
+          wget -O /home/web/nginx.conf https://raw.githubusercontent.com/huaniangzi/sh/main/nginx/nginx10.conf
+          wget -O /home/web/conf.d/default.conf https://raw.githubusercontent.com/huaniangzi/sh/main/nginx/default10.conf
           default_server_ssl
           docker run -d --name nginx --restart always --network web_default -p 80:80 -p 443:443 -p 443:443/udp -v /home/web/nginx.conf:/etc/nginx/nginx.conf -v /home/web/conf.d:/etc/nginx/conf.d -v /home/web/certs:/etc/nginx/certs -v /home/web/html:/var/www/html -v /home/web/log/nginx:/var/log/nginx nginx:alpine
           docker exec -it nginx chmod -R 777 /var/www/html
@@ -2350,7 +2381,7 @@ case $choice in
                             docker rmi -f p3terx/aria2-pro
 
                             cd /home/ && mkdir -p docker/cloud && cd docker/cloud && mkdir temp_data && mkdir -vp cloudreve/{uploads,avatar} && touch cloudreve/conf.ini && touch cloudreve/cloudreve.db && mkdir -p aria2/config && mkdir -p data/aria2 && chmod -R 777 data/aria2
-                            curl -o /home/docker/cloud/docker-compose.yml https://raw.githubusercontent.com/huaniangzi/docker/main/cloudreve-docker-compose.yml
+                            curl -o /home/docker/cloud/docker-compose.yml https://raw.githubusercontent.com/huaniangzi/sh/main/nginx/cloudreve-docker-compose.yml
                             cd /home/docker/cloud/ && docker-compose up -d
 
 
@@ -2394,7 +2425,7 @@ case $choice in
                     clear
                     install_docker
                     cd /home/ && mkdir -p docker/cloud && cd docker/cloud && mkdir temp_data && mkdir -vp cloudreve/{uploads,avatar} && touch cloudreve/conf.ini && touch cloudreve/cloudreve.db && mkdir -p aria2/config && mkdir -p data/aria2 && chmod -R 777 data/aria2
-                    curl -o /home/docker/cloud/docker-compose.yml https://raw.githubusercontent.com/huaniangzi/docker/main/cloudreve-docker-compose.yml
+                    curl -o /home/docker/cloud/docker-compose.yml https://raw.githubusercontent.com/huaniangzi/sh/main/nginx/cloudreve-docker-compose.yml
                     cd /home/docker/cloud/ && docker-compose up -d
 
 

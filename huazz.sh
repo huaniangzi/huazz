@@ -1064,9 +1064,14 @@ case $choice in
     echo  "------------------------"
     echo  "1. 安装LDNMP环境"
     echo  "------------------------"
-    echo -e "\033[91m▼ LDNMP项目  (正版授权项目) ▼\033[0m"
+    echo -e "\033[91m▼ LDNMP项目 ▼\033[0m"
     echo "---------------------------------------------------------"
-    echo  "2. Miaoo朋友圈网站          3. 至尊码支付网站"
+    echo  "2. 个人导航                    3. 个人主页"
+    echo  "4. Files目录程"
+    echo "---------------------------------------------------------"
+    echo -e "\033[91m▼ 正版授权项目 ▼\033[0m"
+    echo "---------------------------------------------------------"
+    echo  "101. Miaoo朋友圈网站          102. 至尊码支付网站"
     echo "---------------------------------------------------------"
     echo -e "\033[91m▼ LDNMP工具 ▼\033[0m"
     echo "---------------------------------------------------------"
@@ -1114,6 +1119,78 @@ case $choice in
 
       2)
       clear
+      # 个人导航
+      add_yuming
+      install_ssltls
+
+      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/huazz/main/nginx/yuming.com.conf
+      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
+
+      cd /home/web/html
+      mkdir $yuming
+      cd $yuming
+      wget -O latest.zip https://github.com/huaniangzi/huazz/raw/main/file/%E5%AF%BC%E8%88%AA.zip
+      unzip latest.zip
+      rm latest.zip
+
+      restart_ldnmp
+
+      clear
+      echo "您的个人导航搭建好了！"
+      echo "https://$yuming"
+      nginx_status
+        ;;
+
+      3)
+      clear
+      # 个人主页
+      add_yuming
+      install_ssltls
+
+      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/huazz/main/nginx/yuming.com.conf
+      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
+
+      cd /home/web/html
+      mkdir $yuming
+      cd $yuming
+      wget -O latest.zip https://github.com/huaniangzi/huazz/blob/raw/file/%E4%B8%AA%E4%BA%BA%E4%B8%BB%E9%A1%B5.zip
+      unzip latest.zip
+      rm latest.zip
+
+      restart_ldnmp
+
+      clear
+      echo "您的个人主页搭建好了！"
+      echo "https://$yuming"
+      nginx_status
+        ;;
+
+      4)
+      clear
+      # Files Photo Gallery
+      add_yuming
+      install_ssltls
+
+      wget -O /home/web/conf.d/$yuming.conf https://raw.githubusercontent.com/huaniangzi/huazz/main/nginx/yuming.com.conf
+      sed -i "s/yuming.com/$yuming/g" /home/web/conf.d/$yuming.conf
+
+      cd /home/web/html
+      mkdir $yuming
+      cd $yuming
+      wget -O latest.zip https://github.com/huaniangzi/huazz/raw/main/file/Files%20Photo%20Gallery.zip
+      unzip latest.zip
+      rm latest.zip
+
+      restart_ldnmp
+
+      clear
+      echo "您的Files Photo Gallery搭建好了！"
+      echo "https://$yuming"
+      nginx_status
+        ;;
+
+      101)
+      clear
       # miaoo朋友圈
       add_yuming
       install_ssltls
@@ -1144,7 +1221,7 @@ case $choice in
       nginx_status
         ;;
 
-      3)
+      102)
       clear
       # 至尊码支付
       add_yuming

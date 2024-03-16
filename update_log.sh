@@ -12,3 +12,7 @@ clear
     echo "3.LDNMP项目新增个人主页搭建"
     echo "4.LDNMP项目新增Files Photo Gallery搭建"
     echo  "------------------------"
+    echo "2024-03-15   v1.0.2"
+    echo "1.LDNMP项目新增filecodebox潘多拉盒子"
+    echo "1.LDNMP项目新增记事本——minimalist"
+    echo  "------------------------"

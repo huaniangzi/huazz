@@ -490,7 +490,7 @@ echo -e "\033[96m_ _ _ _  _   _  _ _  _  _  _  ___  ___ _ "
 echo "|_| | | /_\  |\ | | /_\ |\ | |  _   /  | "
 echo "| | |_| | |  | \| | | | | \| |__|  /__ | "
 echo "                                "
-echo -e "\033[96m花娘子一键脚本工具 v1.0.1 （支持Ubuntu/Debian/CentOS/Alpine系统）\033[0m"
+echo -e "\033[96m花娘子一键脚本工具 v1.0.2 （支持Ubuntu/Debian/CentOS/Alpine系统）\033[0m"
 echo -e "\033[96m-输入\033[93mh\033[96m可快速启动此脚本\033[0m"
 echo "------------------------"
 echo "1. 系统信息查询"
@@ -1071,7 +1071,7 @@ case $choice in
     echo "---------------------------------------------------------"
     echo -e "\033[91m▼ 正版授权项目 ▼\033[0m"
     echo "---------------------------------------------------------"
-    echo  "101. Miaoo朋友圈网站          102. 至尊码支付网站"
+    echo  "101. Miaoo朋友圈网站           102. 至尊码支付网站"
     echo "---------------------------------------------------------"
     echo -e "\033[91m▼ LDNMP工具 ▼\033[0m"
     echo "---------------------------------------------------------"
@@ -1818,6 +1818,7 @@ case $choice in
       echo "27. Dockge容器堆栈管理面板       28. LibreSpeed测速工具"
       echo "29. searxng聚合搜索站            30. PhotoPrism私有相册系统"
       echo "31. StirlingPDF工具大全          32. drawio免费的在线图表软件"
+      echo "33. FileCodeBox潘多拉盒子"
       echo "---------------------------------------------------------"
       echo "0. 返回主菜单"
       echo "------------------------"
@@ -3002,6 +3003,37 @@ case $choice in
             docker_app
               ;;
 
+            33)
+            docker_name="filecodebox"
+            docker_img="lanol/filecodebox:beta"
+            docker_port=12345
+            docker_rum="docker run -d --restart=always \
+                                -p 12345:12345 \
+                                -v /home/docker/FileCodeBox/:/app/data \
+                                --name filecodebox \
+                                lanol/filecodebox:beta"
+            docker_describe="FileCodeBox潘多拉盒子，这是蜂巢快递吗？"
+            docker_url="官网介绍: https://github.com/vastsa/FileCodeBox?tab=readme-ov-file"
+            docker_use="echo \"后端地址：/#/admin\""
+            docker_passwd="echo \"后台密码：FileCodeBox2023\""
+            docker_app
+              ;;
+
+            34)
+            docker_name="minimalist"
+            docker_img="minimalist-web-notepad"
+            docker_port=8006
+            docker_rum="docker run -d -it --restart=always \
+                                --name minimalist \
+                                -v /home/docker/minimalist/:/var/www/html/_tmp \
+                                -p 8006:80 \
+                                minimalist-web-notepad"
+            docker_describe="搭建一个简洁的记事本——minimalist-web-notepad"
+            docker_url="官网介绍: https://github.com/pereorga/minimalist-web-notepad/tree/docker"
+            docker_use=""
+            docker_passwd=""
+            docker_app
+              ;;
 
           0)
               huazz
